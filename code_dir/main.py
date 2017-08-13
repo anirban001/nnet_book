@@ -2,6 +2,23 @@ import code_dir.network as nw
 import code_dir.mnist_loader as mnist_loader
 
 from sklearn import svm
+import sys
+
+def _visualize():
+    training_data, validation_data, test_data = mnist_loader.load_data()
+    for input_index in range(20):
+        vec = training_data[0][input_index]
+        print 'Expected = ', training_data[1][input_index]
+        assert 784 == len(vec)
+        index = -1
+        for i in range(28):
+            for j in range(28):
+                index += 1
+                pixel = '##' if vec[index] > 0.5  else '__'
+                sys.stdout.write(pixel)
+            print
+        print
+
 
 def _learn_with_networks():
     training_data, validation_data, test_data = (
@@ -25,5 +42,6 @@ def _learn_with_support_vector_machines():
 
 
 def do_main():
+    # _learn_with_networks()
     # _learn_with_support_vector_machines()
-    _learn_with_networks()
+    _visualize()
