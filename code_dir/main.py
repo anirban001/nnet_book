@@ -4,6 +4,7 @@ import code_dir.mnist_loader as mnist_loader
 from sklearn import svm
 import sys
 
+
 def _visualize():
     training_data, validation_data, test_data = mnist_loader.load_data()
     for input_index in range(20):
@@ -18,6 +19,21 @@ def _visualize():
                 sys.stdout.write(pixel)
             print
         print
+
+
+def _visualize1():
+    training_data, validation_data, test_data = mnist_loader.load_data()
+    print 'training_data   : ', mnist_loader.get_type(training_data)
+    print 'validation_data : ', mnist_loader.get_type(validation_data)
+    print 'test_data       : ', mnist_loader.get_type(test_data)
+
+
+def _visualize2():
+    training_data, validation_data, test_data = (
+        mnist_loader.load_data_wrapper())
+    print 'training_data   : ', mnist_loader.get_type(training_data)
+    print 'validation_data : ', mnist_loader.get_type(validation_data)
+    print 'test_data       : ', mnist_loader.get_type(test_data)
 
 
 def _learn_with_networks():

@@ -38,11 +38,27 @@ def load_data():
     helpful to modify the format of the ``training_data`` a little.
     That's done in the wrapper function ``load_data_wrapper()``, see
     below.
+
+    training_data   :  tuple(
+        ndarray(shape=(50000, 784), dtype=float32),
+        ndarray(shape=(50000,), dtype=int64)
+    )
+
+    validation_data :  tuple(
+        ndarray(shape=(10000, 784), dtype=float32),
+        ndarray(shape=(10000,), dtype=int64)
+    )
+
+    test_data       :  tuple(
+        ndarray(shape=(10000, 784), dtype=float32),
+        ndarray(shape=(10000,), dtype=int64)
+    )
     """
     f = gzip.open('./data/mnist.pkl.gz', 'rb')
     training_data, validation_data, test_data = cPickle.load(f)
     f.close()
     return (training_data, validation_data, test_data)
+
 
 def load_data_wrapper():
     """Return a tuple containing ``(training_data, validation_data,
@@ -64,7 +80,23 @@ def load_data_wrapper():
     Obviously, this means we're using slightly different formats for
     the training data and the validation / test data.  These formats
     turn out to be the most convenient for use in our neural network
-    code."""
+    code.
+
+    training_data   :  list(
+        tuple(ndarray(shape=(784, 1), dtype=float32),
+              ndarray(shape=(10,  1), dtype=float64))
+    ) of 50000 entries
+
+    validation_data :  list(
+        tuple(ndarray(shape=(784, 1), dtype=float32),
+              <type 'numpy.int64'>)
+    ) of 10000 entries
+
+    test_data       :  list(
+        tuple(ndarray(shape=(784, 1), dtype=float32),
+              <type 'numpy.int64'>)
+    ) of 10000 entries
+    """
     tr_d, va_d, te_d = load_data()
     training_inputs = [np.reshape(x, (784, 1)) for x in tr_d[0]]
     training_results = [vectorized_result(y) for y in tr_d[1]]
@@ -83,3 +115,18 @@ def vectorized_result(j):
     e = np.zeros((10, 1))
     e[j] = 1.0
     return e
+
+
+def get_type(obj):
+    if isinstance(obj, tuple):
+        rv = [get_type(item) for item in obj]
+        return 'tuple(%s)' % ', '.join(rv)
+    if isinstance(obj, list):
+        rv = list(set([get_type(item) for item in obj]))
+        return 'list(%s) of %d entries' % (', '.join(rv), len(obj))
+
+    if isinstance(obj, np.ndarray):
+        return 'ndarray(shape=%s, dtype=%s)' % (
+            str(obj.shape), str(obj.dtype))
+
+    return str(type(obj))
