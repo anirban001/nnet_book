@@ -118,6 +118,8 @@ def vectorized_result(j):
 
 
 def get_type(obj):
+    # https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.shape.html#numpy.ndarray.shape
+    # https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html
     if isinstance(obj, tuple):
         rv = [get_type(item) for item in obj]
         return 'tuple(%s)' % ', '.join(rv)
